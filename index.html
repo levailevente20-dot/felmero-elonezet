@@ -135,7 +135,7 @@ main{padding:clamp(.25rem,4vw - 1rem,3rem) var(--pad) 4rem}
 .back:active{transform:scale(.97)}
 @media (hover:hover) and (pointer:fine){.back:hover{color:var(--ink)}}
 
-.bar{flex:1;display:grid;grid-template-columns:repeat(10,1fr);gap:3px;height:4px}
+.bar{flex:1;display:grid;grid-template-columns:repeat(9,1fr);gap:3px;height:4px}
 .bar i{position:relative;background:var(--cell-empty);border-radius:2px;overflow:hidden}
 .bar i::after{
   content:"";position:absolute;inset:0;background:var(--ink-2);
@@ -385,7 +385,7 @@ details p{margin:0 0 1rem;color:var(--ink-2);font-size:.9375rem;line-height:1.65
 }
 .scope{display:grid;gap:1.15rem;margin:1.8rem 0 0}
 .scope__row{display:grid;gap:.5rem}
-.scope__on{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;width:42%;height:12px}
+.scope__on{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;width:42%;height:12px}
 .scope__on i{background:var(--freed);border-radius:2px}
 .scope__off{display:block;height:12px;border:1px dashed rgba(242,244,247,.38);border-radius:3px}
 .scope__lbl{font-size:.9375rem;color:var(--ink-2)}
@@ -437,7 +437,7 @@ details p{margin:0 0 1rem;color:var(--ink-2);font-size:.9375rem;line-height:1.65
     <section id="intro" class="screen">
     <div>
       <h1 class="hook">Hány órát visz el nálatok hetente az ismétlődő munka, amit már automatizálni lehet?</h1>
-      <p class="lead">Ha nem tudod, nem vagy egyedül. Tíz rövid kérdés, nagyjából egy perc.</p>
+      <p class="lead">Ha nem tudod, nem vagy egyedül. Kilenc rövid kérdés, nagyjából egy perc.</p>
       <button type="button" class="cta" id="start">Kezdjük</button>
       <div><button type="button" class="linkish" id="resume" hidden>Folytatom, ahol abbahagytam</button></div>
             <p class="note">Gyors, alap felmérés. Pontos számot nem ad, azt mutatja meg, merre érdemes nézni.</p>
@@ -482,7 +482,7 @@ details p{margin:0 0 1rem;color:var(--ink-2);font-size:.9375rem;line-height:1.65
 "use strict";
 (function(){
 
-const KEY = "nw-felmero-proto-v2";
+const KEY = "nw-felmero-proto-v3";
 
 const SAVOK = [
   ["1 óránál kevesebb", .5, .25, 1],
@@ -500,14 +500,10 @@ const KAT = [
     q:"A beérkező leveleket kézzel válogatjátok és osztjátok szét.",
     name:"Rendezett postafiók",
     does:"Téma és sürgősség szerint rendezi a beérkező leveleket, a rutinválaszokat előkészíti, a fontosat előre teszi." },
-  { id:"megbeszelesek", ratio:0,
-    q:"Megbeszéléseken ültök, ügyfelekkel vagy a csapattal.",
-    name:"Megbeszélések",
-    does:"" },
   { id:"megbeszeles_utan", ratio:.85,
-    q:"Megbeszélés után összefoglalót, jegyzetet írtok, és e-mailben kiküldtétek a teendőket.",
-    name:"Összefoglaló és teendők a megbeszélés után",
-    does:"A megbeszélés hanganyagából, a résztvevők tudtával leírja, ami elhangzott, kiszedi a döntéseket és a teendőket, és megírja a kiküldendő levelet a ti hangotokon. Ti átnézitek és elküldítek." },
+    q:"Meeting után összefoglalót, jegyzetet írtok, és e-mailben kiküldtétek a teendőket.",
+    name:"Összefoglaló és teendők a meeting után",
+    does:"A meeting hanganyagából, a résztvevők tudtával leírja, ami elhangzott, kiszedi a döntéseket és a teendőket, és megírja a kiküldendő levelet a ti hangotokon. Ti átnézitek és elküldítek." },
   { id:"telefon", ratio:.75,
     q:"Telefonon vagy üzenetben egyeztettek időpontot, foglalást.",
     name:"Foglalás és időpont magától",
@@ -556,15 +552,6 @@ const RAJZ = {
     ["M36 34 h56 v34 h-56 Z", 1],
     ["M36 34 l28 18 l28 -18", 1],
     ["M24 80 h28 l8 10 h40 l8 -10 h28 v24 h-112 Z"]
-  ],
-  megbeszelesek: [
-    ["M22 18 h116 a6 6 0 0 1 6 6 v68 a6 6 0 0 1 -6 6 h-116 a6 6 0 0 1 -6 -6 v-68 a6 6 0 0 1 6 -6 Z"],
-    ["M80 18 v80 M16 58 h128"],
-    ["M43 33 a5 5 0 1 0 10 0 a5 5 0 1 0 -10 0 M38 50 a10 8 0 0 1 20 0"],
-    ["M107 33 a5 5 0 1 0 10 0 a5 5 0 1 0 -10 0 M102 50 a10 8 0 0 1 20 0"],
-    ["M43 73 a5 5 0 1 0 10 0 a5 5 0 1 0 -10 0 M38 90 a10 8 0 0 1 20 0"],
-    ["M107 73 a5 5 0 1 0 10 0 a5 5 0 1 0 -10 0 M102 90 a10 8 0 0 1 20 0", 1],
-    ["M68 106 h24 M80 98 v8"]
   ],
   megbeszeles_utan: [
     ["M28 16 h58 v88 h-58 Z"],
@@ -730,9 +717,7 @@ function szamol(){
     sorok.push({ k, freed: s[1] * k.ratio });
   });
   sorok.sort((x, y) => y.freed - x.freed);
-  const mv = st.a.megbeszelesek;
-  const megbeszeles = (typeof mv === "number" && mv >= 0) ? SAVOK[mv][1] : 0;
-  return { spent, freed, lo, hi, sorok, megbeszeles };
+  return { spent, freed, lo, hi, sorok };
 }
 
 function napMondat(h){
@@ -907,9 +892,7 @@ $("#back").addEventListener("click", async () => {
 });
 
 function uresHTML(r){
-  const h = r.spent > 0
-    ? "A megbeszéléseken túl egyik általános folyamat sem jellemző nálatok."
-    : "A tíz általános folyamat közül egyik sem jellemző nálatok.";
+  const h = "A kilenc általános folyamat közül egyik sem jellemző nálatok.";
   return '<h2 class="hook">' + h + '</h2>'
     + '<p class="lead">Ez is eredmény. Nálatok a lehetőség valószínűleg nem ezekben van, hanem a saját, egyedi munkafolyamataitokban. Azokat viszont nem lehet egy perc alatt felmérni, csak beszélgetésből.</p>'
     + '<p class="talk">Ha kíváncsi vagy, mi lehet nálatok: <a href="#" data-proto>időpontot foglalok</a>.</p>'
@@ -936,7 +919,6 @@ function eredmenyHTML(r){
     + '<p class="range">' + savMondat(r) + '</p></div>'
     + '<div class="res__vis"><div class="res__week" id="resWeek"></div>'
     + '<p class="legend"><span><i style="background:var(--spent)"></i>ennyi megy el rá</span><span><i style="background:var(--freed)"></i>ebből átadható</span></p>'
-    + (r.megbeszeles > 0 ? '<p class="aside" id="meetNote">A megbeszélésekre menő kb. ' + ora(r.megbeszeles) + ' órát nem számoltuk felszabadulónak, mert a megbeszélés az emberek dolga. Az utána jövő összefoglalót, jegyzetet és levelezést viszont igen.</p>' : '')
     + (r.spent > 40 ? '<p class="aside">A megadott idő több egy teljes munkahétnél. Ilyen szám akkor jön ki, ha nálatok ezeket többen végzik.</p>' : '')
     + '</div><div class="res__time">'
     + '<p class="days" id="days">' + napMondat(r.freed) + '</p>'
@@ -967,14 +949,14 @@ function eredmenyHTML(r){
     + '<p class="value__audit" id="valueAudit">A pontos értékhez részletesebb átnézés kell: ki melyik feladattal mennyi időt tölt, és mennyibe kerül az órája.</p></div>'
     + '<details><summary>Hogyan számoltunk?</summary>'
     + '<p>Minden kérdésnél a megadott sáv közepével számoltunk: az 1 óránál kevesebb fél óra, az 1-3 óra 2 óra, a 3-5 óra 4 óra, az 5 óránál több 6 óra. Az alsó és a felső értékhez a sávok szélét vettük, a legfelső sávnál legfeljebb 8 órát.</p>'
-    + '<p>Egy jól beállított automatizálás folyamattól függően az idő 70-90 százalékát tudja átvenni. A többi ellenőrzés, kivételkezelés és karbantartás, az nálatok marad. A megbeszélések idejét nem számoltuk felszabadulónak.</p>'
+    + '<p>Egy jól beállított automatizálás folyamattól függően az idő 70-90 százalékát tudja átvenni. A többi ellenőrzés, kivételkezelés és karbantartás, az nálatok marad.</p>'
     + '<p>Egy évet 48 munkahéttel, egy munkahetet 40 órával számoltunk. A forintérték a nettó órabér céges költségre váltott értéke: bruttó bér és munkáltatói járulék együtt, ami a mostani kulcsokkal a nettó nagyjából 1,7-szerese.</p>'
     + '</details></section>'
 
     + '<section class="bridge" aria-labelledby="h-bridge">'
     + '<h2 class="bridge__h" id="h-bridge">Ez csak az, ami szinte minden cégnél megvan.</h2>'
     + '<div class="scope">'
-    + '<div class="scope__row"><span class="scope__on" aria-hidden="true">' + "<i></i>".repeat(10) + '</span><span class="scope__lbl">Amit most megnéztünk: a tíz általános folyamat</span></div>'
+    + '<div class="scope__row"><span class="scope__on" aria-hidden="true">' + "<i></i>".repeat(KAT.length) + '</span><span class="scope__lbl">Amit most megnéztünk: a kilenc általános folyamat</span></div>'
     + '<div class="scope__row"><span class="scope__off" aria-hidden="true"></span><span class="scope__lbl">Amit egy perc alatt nem lehet: a ti saját, egyedi folyamataitok</span></div>'
     + '</div>'
     + '<p class="bridge__p">A saját, egyedi munkafolyamataitokban általában ennél is több lehetőség van.</p>'
