@@ -135,7 +135,7 @@ main{padding:clamp(.25rem,4vw - 1rem,3rem) var(--pad) 4rem}
 .back:active{transform:scale(.97)}
 @media (hover:hover) and (pointer:fine){.back:hover{color:var(--ink)}}
 
-.bar{flex:1;display:grid;grid-template-columns:repeat(9,1fr);gap:3px;height:4px}
+.bar{flex:1;display:grid;grid-template-columns:repeat(8,1fr);gap:3px;height:4px}
 .bar i{position:relative;background:var(--cell-empty);border-radius:2px;overflow:hidden}
 .bar i::after{
   content:"";position:absolute;inset:0;background:var(--ink-2);
@@ -190,6 +190,10 @@ main{padding:clamp(.25rem,4vw - 1rem,3rem) var(--pad) 4rem}
   margin:0;text-wrap:balance;outline:none;
 }
 
+.q__ex{margin:.25rem 0 0;font-size:.8125rem;line-height:1.35;color:var(--ink-3)}
+
+#cardBody:has(.ask__tip) .ask{margin-top:.4rem;margin-bottom:.3rem}
+.kek{color:var(--accent)}
 .ask{margin:.6rem 0 .45rem;font-size:1.0625rem;line-height:1.4;color:var(--ink)}
 .het{font-weight:600;padding:0 .1em;box-shadow:inset 0 -.36em 0 rgba(56,189,248,.34)}
 .ask__tip{margin:-.25rem 0 .5rem;font-size:.8125rem;line-height:1.4;color:var(--ink-3)}
@@ -228,6 +232,7 @@ main{padding:clamp(.25rem,4vw - 1rem,3rem) var(--pad) 4rem}
   .q{font-size:1.2rem}
   .opts{gap:.3rem}
   .ask{margin:.5rem 0 .35rem}
+  .ask__tip{display:none}
   .opt{min-height:40px;padding-block:.3rem}
 }
 
@@ -385,7 +390,7 @@ details p{margin:0 0 1rem;color:var(--ink-2);font-size:.9375rem;line-height:1.65
 }
 .scope{display:grid;gap:1.15rem;margin:1.8rem 0 0}
 .scope__row{display:grid;gap:.5rem}
-.scope__on{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;width:42%;height:12px}
+.scope__on{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;width:42%;height:12px}
 .scope__on i{background:var(--freed);border-radius:2px}
 .scope__off{display:block;height:12px;border:1px dashed rgba(242,244,247,.38);border-radius:3px}
 .scope__lbl{font-size:.9375rem;color:var(--ink-2)}
@@ -437,10 +442,10 @@ details p{margin:0 0 1rem;color:var(--ink-2);font-size:.9375rem;line-height:1.65
     <section id="intro" class="screen">
     <div>
       <h1 class="hook">Hány órát visz el nálatok hetente az ismétlődő munka, amit már automatizálni lehet?</h1>
-      <p class="lead">Ha nem tudod, nem vagy egyedül. Kilenc rövid kérdés, nagyjából egy perc.</p>
+      <p class="lead">Ha nem tudod, nem vagy egyedül. Nyolc rövid kérdés, <span class="kek">nagyjából 3&nbsp;perc</span>.</p>
       <button type="button" class="cta" id="start">Kezdjük</button>
       <div><button type="button" class="linkish" id="resume" hidden>Folytatom, ahol abbahagytam</button></div>
-            <p class="note">Gyors, alap felmérés. Pontos számot nem ad, azt mutatja meg, merre érdemes nézni.</p>
+            <p class="note">Gyors, alap felmérés. Pontos számot nem ad, azt mutatja meg, mit érdemes automatizálni elsőre.</p>
       <p class="fine">A válaszaid a böngésződben maradnak.</p>
     </div>
     <div class="intro__week">
@@ -482,7 +487,7 @@ details p{margin:0 0 1rem;color:var(--ink-2);font-size:.9375rem;line-height:1.65
 "use strict";
 (function(){
 
-const KEY = "nw-felmero-proto-v3";
+const KEY = "nw-felmero-proto-v4";
 
 const SAVOK = [
   ["1 óránál kevesebb", .5, .25, 1],
@@ -494,14 +499,15 @@ const SAVOK = [
 const KAT = [
   { id:"kerdesek", ratio:.8,
     q:"Ugyanazokra a kérdésekre válaszoltok nap mint nap.",
+    ex:"Például e-mail, Messenger, Facebook, Instagram.",
     name:"Válaszok a saját anyagaitokból",
     does:"A visszatérő kérdésekre a ti saját dokumentumaitok alapján válaszol, a ti hangotokon. Amire nincs biztos válasza, azt átadja embernek." },
   { id:"levelek", ratio:.7,
-    q:"A beérkező leveleket kézzel válogatjátok és osztjátok szét.",
-    name:"Rendezett postafiók",
-    does:"Téma és sürgősség szerint rendezi a beérkező leveleket, a rutinválaszokat előkészíti, a fontosat előre teszi." },
+    q:"A beérkező megkereséseket kézzel válogatjátok és osztjátok szét.",
+    name:"Rendezett megkeresések",
+    does:"Téma és sürgősség szerint rendezi a beérkező megkereséseket, a rutinválaszokat előkészíti, a fontosat előre teszi." },
   { id:"megbeszeles_utan", ratio:.85,
-    q:"Meeting után összefoglalót, jegyzetet írtok, és e-mailben kiküldtétek a teendőket.",
+    q:"Meeting után összefoglalót, jegyzetet írtok.",
     name:"Összefoglaló és teendők a meeting után",
     does:"A meeting hanganyagából, a résztvevők tudtával leírja, ami elhangzott, kiszedi a döntéseket és a teendőket, és megírja a kiküldendő levelet a ti hangotokon. Ti átnézitek és elküldítek." },
   { id:"telefon", ratio:.75,
@@ -516,10 +522,6 @@ const KAT = [
     q:"Ajánlatokat, érdeklődőket kézzel követtek után.",
     name:"Utánkövetés magától",
     does:"Figyeli, melyik ajánlatra nem jött válasz, és a megbeszélt ütem szerint küld emlékeztetőt. Ha válasz érkezik, átadja nektek." },
-  { id:"papir", ratio:.85,
-    q:"Számlát, szállítólevelet, papírt gépeltek be kézzel.",
-    name:"Papírból adat, gépelés nélkül",
-    does:"Lefotózott számláról, szállítólevélről, kézzel írt jegyről kiolvassa az adatokat, és beírja oda, ahol dolgoztok velük." },
   { id:"adatmasolas", ratio:.9,
     q:"Adatot másoltok át az egyik rendszerből a másikba.",
     name:"Átvezetés rendszerek között",
@@ -817,6 +819,7 @@ function kartyaHTML(k){
   
   const tip = st.i === 0 ? '<p class="ask__tip">Egy teljes hétre összeadva: napi fél óra is már heti 2,5 óra.</p>' : "";
   return '<h2 class="q" tabindex="-1">' + k.q + '</h2>'
+    + (k.ex ? '<p class="q__ex">' + k.ex + '</p>' : '')
     + '<p class="ask" id="ask"><strong class="het">Hetente</strong> mennyi idő megy el rá?</p>'
     + tip
     + '<ul class="opts" aria-labelledby="ask">' + opts
@@ -892,7 +895,7 @@ $("#back").addEventListener("click", async () => {
 });
 
 function uresHTML(r){
-  const h = "A kilenc általános folyamat közül egyik sem jellemző nálatok.";
+  const h = "A nyolc általános folyamat közül egyik sem jellemző nálatok.";
   return '<h2 class="hook">' + h + '</h2>'
     + '<p class="lead">Ez is eredmény. Nálatok a lehetőség valószínűleg nem ezekben van, hanem a saját, egyedi munkafolyamataitokban. Azokat viszont nem lehet egy perc alatt felmérni, csak beszélgetésből.</p>'
     + '<p class="talk">Ha kíváncsi vagy, mi lehet nálatok: <a href="#" data-proto>időpontot foglalok</a>.</p>'
@@ -956,7 +959,7 @@ function eredmenyHTML(r){
     + '<section class="bridge" aria-labelledby="h-bridge">'
     + '<h2 class="bridge__h" id="h-bridge">Ez csak az, ami szinte minden cégnél megvan.</h2>'
     + '<div class="scope">'
-    + '<div class="scope__row"><span class="scope__on" aria-hidden="true">' + "<i></i>".repeat(KAT.length) + '</span><span class="scope__lbl">Amit most megnéztünk: a kilenc általános folyamat</span></div>'
+    + '<div class="scope__row"><span class="scope__on" aria-hidden="true">' + "<i></i>".repeat(KAT.length) + '</span><span class="scope__lbl">Amit most megnéztünk: a nyolc általános folyamat</span></div>'
     + '<div class="scope__row"><span class="scope__off" aria-hidden="true"></span><span class="scope__lbl">Amit egy perc alatt nem lehet: a ti saját, egyedi folyamataitok</span></div>'
     + '</div>'
     + '<p class="bridge__p">A saját, egyedi munkafolyamataitokban általában ennél is több lehetőség van.</p>'
