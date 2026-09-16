@@ -8,7 +8,7 @@
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap">
 <style>
 
 :root{
@@ -25,6 +25,7 @@
   --line:rgba(242,244,247,.13);
   --surface:rgba(242,244,247,.045);
   --accent:#38BDF8;
+  --accent-hi:#5CCBFA;
   --accent-soft:rgba(56,189,248,.14);
   
   --spent:rgba(242,244,247,.30);
@@ -38,7 +39,7 @@
 
 *{box-sizing:border-box}
 html,body{margin:0}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
 body{
   background:var(--bg);
   color:var(--ink);
@@ -100,9 +101,10 @@ main{padding:clamp(.25rem,4vw - 1rem,3rem) var(--pad) 4rem}
   border:0;border-radius:var(--radius);
   background:var(--accent);color:#03131D;
   font-family:var(--font-display);font-weight:600;font-size:1.0625rem;
-  cursor:pointer;transition:transform .16s var(--ease-out);
+  cursor:pointer;transition:transform .16s var(--ease-out),background-color .16s ease;
 }
 .cta:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){.cta:hover{background:var(--accent-hi)}}
 .note{margin:1.7rem 0 0;font-size:.9375rem;color:var(--ink-2);max-width:40ch}
 .fine{margin:.5rem 0 0;font-size:.8125rem;color:var(--ink-3)}
 .linkish{
@@ -114,12 +116,15 @@ main{padding:clamp(.25rem,4vw - 1rem,3rem) var(--pad) 4rem}
 @media (max-width:899px){
   .cta{margin-top:1.5rem}
   .note{margin-top:1.25rem}
-  .intro__week{margin-top:1.9rem;--cell-h:10px}
-  .caption{max-width:none}
+  .intro__week{margin-top:1.5rem;--cell-h:9px;--cell-gap:2px}
+  .caption{max-width:none;margin-top:.6rem}
 }
 @media (min-width:900px){
-  #intro{display:grid;grid-template-columns:1.25fr .75fr;gap:4rem;align-items:center}
-  .intro__week{margin:0;--cell-h:17px;--cell-gap:4px}
+  
+  #intro{display:grid;grid-template-columns:1.25fr .75fr;gap:0 4rem;align-items:center}
+  .intro__main{grid-column:1;grid-row:1}
+  .intro__fine{grid-column:1;grid-row:2}
+  .intro__week{grid-column:2;grid-row:1 / span 2;margin:0;--cell-h:17px;--cell-gap:4px}
 }
 
 .stepper{display:flex;align-items:center;gap:.85rem;min-height:36px}
@@ -192,7 +197,9 @@ main{padding:clamp(.25rem,4vw - 1rem,3rem) var(--pad) 4rem}
 
 .q__ex{margin:.25rem 0 0;font-size:.8125rem;line-height:1.35;color:var(--ink-3)}
 
-#cardBody:has(.ask__tip) .ask{margin-top:.4rem;margin-bottom:.3rem}
+@media (max-width:899px){
+  #cardBody:has(.ask__tip) .ask{margin-top:.4rem;margin-bottom:.3rem}
+}
 .kek{color:var(--accent)}
 .ask{margin:.6rem 0 .45rem;font-size:1.0625rem;line-height:1.4;color:var(--ink)}
 .het{font-weight:600;padding:0 .1em;box-shadow:inset 0 -.36em 0 rgba(56,189,248,.34)}
@@ -226,14 +233,14 @@ main{padding:clamp(.25rem,4vw - 1rem,3rem) var(--pad) 4rem}
 }
 
 @media (max-width:899px) and (max-height:620px){
-  #miniWeek .week{--cell-h:3px}
+  #miniWeek .week{--cell-h:2px}
   .ill{width:84px}
   .score__t{margin-top:.2rem}
   .q{font-size:1.2rem}
   .opts{gap:.3rem}
   .ask{margin:.5rem 0 .35rem}
   .ask__tip{display:none}
-  .opt{min-height:40px;padding-block:.3rem}
+  .opt{min-height:44px;padding-block:.3rem}
 }
 
 @media (min-width:900px){
@@ -415,6 +422,8 @@ details p{margin:0 0 1rem;color:var(--ink-2);font-size:.9375rem;line-height:1.65
 .mail .fine{margin-top:.9rem}
 .talk{margin:1.8rem 0 0;color:var(--ink-2)}
 .talk a{color:var(--ink);text-underline-offset:4px;text-decoration-color:var(--line)}
+.vissza{margin:2.4rem 0 0}
+.vissza + .again{margin-top:.2rem}
 .again{
   display:inline-block;margin:2.6rem 0 0;padding:.4rem 0;border:0;background:none;cursor:pointer;
   color:var(--ink-2);text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--line);
@@ -439,18 +448,20 @@ details p{margin:0 0 1rem;color:var(--ink-2);font-size:.9375rem;line-height:1.65
 
 <main>
 
-    <section id="intro" class="screen">
-    <div>
+      <section id="intro" class="screen">
+    <div class="intro__main">
       <h1 class="hook">Hány órát visz el nálatok hetente az ismétlődő munka, amit már automatizálni lehet?</h1>
       <p class="lead">Ha nem tudod, nem vagy egyedül. Nyolc rövid kérdés, <span class="kek">nagyjából 3&nbsp;perc</span>.</p>
       <button type="button" class="cta" id="start">Kezdjük</button>
       <div><button type="button" class="linkish" id="resume" hidden>Folytatom, ahol abbahagytam</button></div>
-            <p class="note">Gyors, alap felmérés. Pontos számot nem ad, azt mutatja meg, mit érdemes automatizálni elsőre.</p>
-      <p class="fine">A válaszaid a böngésződben maradnak.</p>
     </div>
     <div class="intro__week">
       <div id="introWeek"></div>
-      <p class="caption">Egy munkahét, 40 óra. A végén megmutatjuk a tiéteket: mennyi megy el, és mennyi szabadulhatna fel belőle.</p>
+      <p class="caption">Egy munkahét, 40 óra. A végén megmutatjuk a tiéteket.</p>
+    </div>
+    <div class="intro__fine">
+            <p class="note">Gyors, alap felmérés. Pontos számot nem ad, azt mutatja meg, mit érdemes automatizálni elsőre.</p>
+      <p class="fine">A válaszaid a böngésződben maradnak.</p>
     </div>
   </section>
 
@@ -521,7 +532,7 @@ const KAT = [
   { id:"utankovetes", ratio:.8,
     q:"Ajánlatokat, érdeklődőket kézzel követtek után.",
     name:"Utánkövetés magától",
-    does:"Figyeli, melyik ajánlatra nem jött válasz, és a megbeszélt ütem szerint küld emlékeztetőt. Ha válasz érkezik, átadja nektek." },
+    does:"Figyeli, melyik ajánlatra nem jött válasz, és a beállított ütem szerint küld emlékeztetőt. Ha válasz érkezik, átadja nektek." },
   { id:"adatmasolas", ratio:.9,
     q:"Adatot másoltok át az egyik rendszerből a másikba.",
     name:"Átvezetés rendszerek között",
@@ -591,15 +602,6 @@ const RAJZ = {
     ["M114 44 v12 l8 6", 1],
     ["M102 80 q-6 22 -34 20"],
     ["M74 94 l-6 6 l7 5"]
-  ],
-  papir: [
-    ["M34 16 h44 v78 l-5.5 -5 l-5.5 5 l-5.5 -5 l-5.5 5 l-5.5 -5 l-5.5 5 l-5.5 -5 l-5.5 5 v-78 Z"],
-    ["M42 30 h28 M42 40 h20 M42 50 h26 M42 60 h16"],
-    ["M42 76 h28", 1],
-    ["M86 55 h18 M98 49 l6 6 l-6 6", 1],
-    ["M112 32 h36 v46 h-36 Z"],
-    ["M118 42 h24 M118 52 h24"],
-    ["M118 62 h16", 1]
   ],
   adatmasolas: [
     ["M18 28 h50 v60 h-50 Z"],
@@ -691,7 +693,8 @@ function ora(h){
 
 function penz1(v){
   if(v >= 1e6) return String(Math.round(v / 1e5) / 10).replace(".", ",") + " millió";
-  if(v >= 1e4) return (Math.round(v / 1e4) * 10) + " ezer";
+  if(v >= 1e5) return (Math.round(v / 1e4) * 10) + " ezer";
+  if(v >= 1e4) return Math.round(v / 1e3) + " ezer";
   return Math.max(1, Math.round(v / 1e3)) + " ezer";
 }
 function penzSav(lo, hi){
@@ -856,7 +859,7 @@ async function mutatKartya(irany){
   if(MOZGAS && irany !== 0 && body.childElementCount){
     const ki = [{ opacity:1, transform:"none" },
                 { opacity:0, transform:"translateX(" + (-26 * irany) + "px) rotate(" + (-1.6 * irany) + "deg)" }];
-    await Promise.all([body, ill].map(el => el.animate(ki, { duration:180, easing:EASE, fill:"forwards" }).finished));
+    await Promise.all([body, ill].map(el => el.animate(ki, { duration:140, easing:EASE, fill:"forwards" }).finished));
   }
   [body, ill].forEach(el => el.getAnimations().forEach(a => a.cancel()));
   ill.innerHTML = illHTML(KAT[st.i]);
@@ -864,7 +867,9 @@ async function mutatKartya(irany){
   typoFix(body);
   frissitProgress();
   if(MOZGAS && irany !== 0){
-    [body, ill].forEach(el => el.animate([{ opacity:0, transform:"translateY(14px)" }, { opacity:1, transform:"none" }], { duration:360, easing:EASE }));
+    
+    const be = [{ opacity:0, transform:"translateX(" + (26 * irany) + "px)" }, { opacity:1, transform:"none" }];
+    [body, ill].forEach(el => el.animate(be, { duration:260, easing:EASE }));
   }
   const h = body.querySelector(".q");
   if(h) h.focus({ preventScroll:true });
@@ -883,7 +888,7 @@ $("#cardBody").addEventListener("click", e => {
     if(st.i < KAT.length - 1){ st.i++; save(); await mutatKartya(1); }
     else { await eredmeny(); }
     busy = false;
-  }, MOZGAS ? 380 : 80);
+  }, MOZGAS ? 220 : 80);
 });
 
 $("#back").addEventListener("click", async () => {
@@ -897,14 +902,28 @@ $("#back").addEventListener("click", async () => {
 function uresHTML(r){
   const h = "A nyolc általános folyamat közül egyik sem jellemző nálatok.";
   return '<h2 class="hook">' + h + '</h2>'
-    + '<p class="lead">Ez is eredmény. Nálatok a lehetőség valószínűleg nem ezekben van, hanem a saját, egyedi munkafolyamataitokban. Azokat viszont nem lehet egy perc alatt felmérni, csak beszélgetésből.</p>'
+    + '<p class="lead">Ez is eredmény. Nálatok a lehetőség valószínűleg nem ezekben van, hanem a saját, egyedi munkafolyamataitokban. Azokat viszont nem lehet így felmérni, csak beszélgetésből.</p>'
     + '<p class="talk">Ha kíváncsi vagy, mi lehet nálatok: <a href="#" data-proto>időpontot foglalok</a>.</p>'
+    + '<p class="vissza"><button type="button" class="linkish" id="back2">Visszalépek a kérdésekhez</button></p>'
     + '<button type="button" class="again" id="again">Újrakezdem</button>';
 }
 
 function forras(ikon, cim, szoveg){
   return '<li><svg class="art icon" viewBox="0 0 48 48" aria-hidden="true">' + utak(IKON[ikon]) + '</svg>'
     + '<div><h3>' + cim + '</h3><p>' + szoveg + '</p></div></li>';
+}
+
+function mailHTML(n){
+  return '<section class="mail" aria-labelledby="h-mail' + n + '">'
+    + '<h2 class="sec__h" id="h-mail' + n + '">Elküldjük részletesen, folyamatonként</h2>'
+    + '<p>Minden bejelölt folyamatra külön elmagyarázzuk, mit lehet belőle automatizálni, valós példákon keresztül, és azt is, hogy mivel érdemes kezdeni.</p>'
+    + '<form class="mailForm" novalidate>'
+    + '<div class="field"><label class="sr" for="email' + n + '">E-mail-cím</label>'
+    + '<input id="email' + n + '" type="email" autocomplete="email" placeholder="neved@cegetek.hu">'
+    + '<button class="cta" type="submit">Küldjétek el</button></div>'
+    + '<label class="check"><input type="checkbox" id="optin' + n + '"><span>A későbbi, hasonló témájú leveleket is kérem. Bármikor leiratkozhatok.</span></label>'
+    + '<p class="fine mailMsg" role="status">Prototípus: ez a rész még nem küld semmit.</p>'
+    + '</form></section>';
 }
 
 function eredmenyHTML(r){
@@ -930,6 +949,8 @@ function eredmenyHTML(r){
 
     + '<section class="sec" aria-labelledby="h-top"><h2 class="sec__h" id="h-top">Ahol a legtöbb idő van</h2>'
     + '<ul class="tops">' + tops + '</ul></section>'
+
+    + mailHTML(1)
 
     + '<section class="sec brain" id="brain" aria-labelledby="h-brain"><h2 class="sec__h" id="h-brain">A saját céges agyatokból dolgozik</h2>'
     + '<p class="brain__lead">Nem egy általános chatbot válaszol, hanem abból dolgozik, amit a cégetek már tud. Ebből épül fel a céges agy:</p>'
@@ -960,23 +981,16 @@ function eredmenyHTML(r){
     + '<h2 class="bridge__h" id="h-bridge">Ez csak az, ami szinte minden cégnél megvan.</h2>'
     + '<div class="scope">'
     + '<div class="scope__row"><span class="scope__on" aria-hidden="true">' + "<i></i>".repeat(KAT.length) + '</span><span class="scope__lbl">Amit most megnéztünk: a nyolc általános folyamat</span></div>'
-    + '<div class="scope__row"><span class="scope__off" aria-hidden="true"></span><span class="scope__lbl">Amit egy perc alatt nem lehet: a ti saját, egyedi folyamataitok</span></div>'
+    + '<div class="scope__row"><span class="scope__off" aria-hidden="true"></span><span class="scope__lbl">Amit egy kérdéssorral nem lehet: a ti saját, egyedi folyamataitok</span></div>'
     + '</div>'
     + '<p class="bridge__p">A saját, egyedi munkafolyamataitokban általában ennél is több lehetőség van.</p>'
     + '<p class="bridge__strong">A pontos képhez minden cégnél végig kell nézni a valós folyamatokat. Ebből a felmérésből ez nem derülhet ki, és nem is ez a dolga.</p>'
     + '</section>'
 
-    + '<section class="mail" aria-labelledby="h-mail"><h2 class="sec__h" id="h-mail">Elküldjük részletesen, folyamatonként</h2>'
-    + '<p>Minden bejelölt folyamatra külön elmagyarázzuk, mit lehet belőle automatizálni, valós példákon keresztül, és azt is, hogy mivel érdemes kezdeni.</p>'
-    + '<form id="mailForm" novalidate>'
-    + '<div class="field"><label class="sr" for="email">E-mail-cím</label>'
-    + '<input id="email" type="email" autocomplete="email" placeholder="neved@cegetek.hu">'
-    + '<button class="cta" type="submit">Küldjétek el</button></div>'
-    + '<label class="check"><input type="checkbox" id="optin"><span>A későbbi, hasonló témájú leveleket is kérem. Bármikor leiratkozhatok.</span></label>'
-    + '<p class="fine" id="mailMsg" role="status">Prototípus: ez a rész még nem küld semmit.</p>'
-    + '</form></section>'
+    + mailHTML(2)
 
     + '<p class="talk">Ha inkább beszélnél róla személyesen: <a href="#" data-proto>időpontot foglalok</a>.</p>'
+    + '<p class="vissza"><button type="button" class="linkish" id="back2">Visszalépek a kérdésekhez</button></p>'
     + '<button type="button" class="again" id="again">Újrakezdem</button>';
 }
 
@@ -1044,16 +1058,27 @@ async function eredmeny(){
 
   const range = $("#netto");
   if(range){ const f = () => ertekFrissit(r); range.addEventListener("input", f); f(); }
-  const form = $("#mailForm");
-  if(form) form.addEventListener("submit", e => {
+  host.querySelectorAll(".mailForm").forEach(form => form.addEventListener("submit", e => {
     e.preventDefault();
-    $("#mailMsg").textContent = hu("Prototípus: élesben itt jönne a visszaigazolás, és indulna az első levél.");
-  });
+    const uz = form.querySelector(".mailMsg");
+    if(uz) uz.textContent = hu("Prototípus: élesben itt jönne a visszaigazolás, és indulna az első levél.");
+  }));
   host.querySelectorAll("[data-proto]").forEach(a => a.addEventListener("click", e => {
     e.preventDefault();
     a.textContent = hu("időpontot foglalok (prototípus, még nincs bekötve)");
   }));
   $("#again").addEventListener("click", ujra);
+  
+  const b2 = $("#back2");
+  if(b2) b2.addEventListener("click", async () => {
+    if(busy) return;
+    busy = true;
+    st.i = KAT.length - 1;
+    save();
+    await mutatKartya(0);
+    await kepernyo(host, $("#card"));
+    busy = false;
+  });
 
   await kepernyo($("#card"), host);
   $("#illHost").innerHTML = "";
