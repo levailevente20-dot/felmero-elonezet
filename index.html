@@ -107,6 +107,7 @@ main{padding:clamp(.25rem,4vw - 1rem,3rem) var(--pad) 4rem}
 @media (hover:hover) and (pointer:fine){.cta:hover{background:var(--accent-hi)}}
 .note{margin:1.7rem 0 0;font-size:.9375rem;color:var(--ink-2);max-width:40ch}
 .fine{margin:.5rem 0 0;font-size:.8125rem;color:var(--ink-3)}
+.note + .note{margin-top:.5rem}
 .linkish{
   margin:1rem 0 0;padding:.4rem 0;border:0;background:none;cursor:pointer;
   color:var(--ink);text-decoration:underline;text-underline-offset:4px;
@@ -246,7 +247,8 @@ main{padding:clamp(.25rem,4vw - 1rem,3rem) var(--pad) 4rem}
 @media (min-width:900px){
   #card{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:3.5rem;align-items:start}
   .qcard{padding:1.1rem 2rem 2rem;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
-  .score{margin-top:1rem;padding:0;border:0;justify-content:flex-start}
+  
+  .score{display:none}
   .score__week{display:none}
   .side{display:block;padding-top:1.5rem}
   .side .week{--cell-h:17px;--cell-gap:4px}
@@ -256,7 +258,9 @@ main{padding:clamp(.25rem,4vw - 1rem,3rem) var(--pad) 4rem}
     font-size:2.4rem;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums;
   }
   #cardBody{padding-top:1rem}
-  .ill{width:120px;--stroke-k:1.15}
+  
+  #illSide{margin:.7rem 0 0}
+  #illSide .ill{width:100%;--stroke-k:.85}
   .q{font-size:clamp(1.4rem,.55rem + 1.35vw,1.8rem)}
   .ask{margin:1rem 0 .6rem;font-size:1.125rem}
   .opts{gap:.5rem}
@@ -319,29 +323,17 @@ main{padding:clamp(.25rem,4vw - 1rem,3rem) var(--pad) 4rem}
 .top3 p{margin:.3rem 0 0;color:var(--ink-2);font-size:.9375rem;line-height:1.55}
 .top3 .h{margin:.5rem 0 0;color:var(--ink);font-variant-numeric:tabular-nums}
 
-.brain__lead{color:var(--ink-2);max-width:52ch;margin:-.4rem 0 0}
-.brain__src{position:relative;list-style:none;margin:1.6rem 0 0;padding:0;display:grid;gap:1.35rem}
-
-.brain__src::before{
-  content:"";position:absolute;left:21px;top:22px;bottom:-41px;width:1px;
-  background:var(--line);transform-origin:top center;transform:scaleY(0);
-  transition:transform 1.1s var(--ease-out);
+.reframe{position:relative;margin:3.4rem 0 0;padding-top:1.5rem;max-width:46ch}
+.reframe::before{
+  content:"";position:absolute;left:0;top:0;width:44px;height:3px;
+  border-radius:2px;background:var(--accent);
 }
-.brain.on .brain__src::before{transform:scaleY(1)}
-.brain__src li{position:relative;display:grid;grid-template-columns:44px 1fr;gap:1rem;align-items:start}
-.icon{width:44px;height:44px;padding:4px;background:var(--bg);color:var(--ill-ink);--stroke-k:1.15}
-.brain__src h3{margin:.15rem 0 0;font-family:var(--font-display);font-weight:600;font-size:1.0625rem;line-height:1.3}
-.brain__src p{margin:.25rem 0 0;color:var(--ink-2);font-size:.9375rem;line-height:1.55}
-.brain__out{
-  position:relative;margin:1.7rem 0 0;padding-left:60px;
-  font-family:var(--font-display);font-weight:500;font-size:1.15rem;line-height:1.4;max-width:46ch;
+.reframe__h{
+  margin:0;font-family:var(--font-display);font-weight:600;
+  letter-spacing:-.022em;line-height:1.2;
+  font-size:clamp(1.3rem,1.1rem + .9vw,1.7rem);text-wrap:balance;
 }
-.brain__out::before{
-  content:"";position:absolute;left:17px;top:.5em;width:9px;height:9px;border-radius:50%;
-  background:var(--accent);opacity:0;transform:scale(.6);
-  transition:opacity .35s ease .9s,transform .45s var(--ease-out) .9s;
-}
-.brain.on .brain__out::before{opacity:1;transform:none}
+.reframe__p{margin:.7rem 0 0;color:var(--ink-2);line-height:1.6}
 
 .rate__help{margin:-.4rem 0 1.4rem;color:var(--ink-2);max-width:54ch}
 .rate{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
@@ -372,7 +364,6 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
   font-size:clamp(1.75rem,1.3rem + 1.9vw,2.5rem);line-height:1.1;font-variant-numeric:tabular-nums;
 }
 .value__n{margin:.6rem 0 0;font-size:.875rem;color:var(--ink-3);max-width:50ch}
-.value__audit{margin:.5rem 0 0;font-size:.9375rem;color:var(--ink-2);max-width:50ch}
 
 details{margin:2.2rem 0 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 summary{
@@ -401,15 +392,16 @@ details p{margin:0 0 1rem;color:var(--ink-2);font-size:.9375rem;line-height:1.65
 .scope__on i{background:var(--freed);border-radius:2px}
 .scope__off{display:block;height:12px;border:1px dashed rgba(242,244,247,.38);border-radius:3px}
 .scope__lbl{font-size:.9375rem;color:var(--ink-2)}
-.bridge__p{margin:1.9rem 0 0;color:var(--ink-2);font-size:1.0625rem;max-width:48ch}
 .bridge__strong{
-  margin:.9rem 0 0;font-family:var(--font-display);font-weight:500;
+  margin:1.9rem 0 0;font-family:var(--font-display);font-weight:500;
   font-size:clamp(1.15rem,1.02rem + .5vw,1.35rem);line-height:1.4;max-width:44ch;
 }
 
 .mail{margin:4rem 0 0;padding:clamp(1.3rem,4vw,1.9rem);border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
 .mail .sec__h{margin-bottom:.6rem}
-.mail > p{color:var(--ink-2);max-width:50ch}
+.mail__txt p{color:var(--ink-2);max-width:50ch}
+
+.mail__nums{margin:0 0 .7rem;font-family:var(--font-display);font-weight:500;font-size:1.0625rem;color:var(--ink)}
 .field{display:flex;flex-wrap:wrap;gap:.55rem;margin:1.2rem 0 0}
 .field input{
   flex:1 1 13rem;min-height:52px;padding:0 1.05rem;
@@ -431,9 +423,6 @@ details p{margin:0 0 1rem;color:var(--ink-2);font-size:.9375rem;line-height:1.65
 
 @media (min-width:900px){
 
-  .score{justify-content:flex-end}
-  .ill{width:148px}
-
   #result > .sec:has(.tops){max-width:none}
   .tops{grid-template-columns:repeat(3,minmax(0,1fr));gap:2.4rem}
   
@@ -447,22 +436,22 @@ details p{margin:0 0 1rem;color:var(--ink-2);font-size:.9375rem;line-height:1.65
     display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
     column-gap:3rem;align-items:start;padding:2rem 2.2rem;
   }
-  .mail .sec__h{grid-column:1;grid-row:1}
-  .mail > p{grid-column:1;grid-row:2;max-width:none}
-  .mail form{grid-column:2;grid-row:1 / span 2;align-self:center}
+  .mail__txt{grid-column:1}
+  .mail__txt p{max-width:none}
+  .mail form{grid-column:2;align-self:center}
   .field{margin-top:0}
 
   .bridge{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:4rem;align-items:start}
   .bridge__h{grid-column:1;grid-row:1;max-width:none}
   .bridge .scope{grid-column:1;grid-row:2;max-width:none;margin-top:1.6rem}
-  .bridge__p{grid-column:2;grid-row:1;margin:0;max-width:none}
-  .bridge__strong{grid-column:2;grid-row:2;margin-top:1.4rem;max-width:none}
+  .bridge__strong{grid-column:2;grid-row:1;margin-top:0;max-width:none}
 }
 
 @media (min-width:900px) and (max-height:800px){
   .qcard{padding:.9rem 1.6rem 1.5rem}
   #cardBody{padding-top:.6rem}
-  .ill{width:104px}
+  #illSide{margin-top:1.3rem}
+  #illSide .ill{max-width:290px}
   .q{font-size:1.5rem}
   .ask{margin:.7rem 0 .5rem}
   .opts{gap:.35rem}
@@ -503,6 +492,7 @@ details p{margin:0 0 1rem;color:var(--ink-2);font-size:.9375rem;line-height:1.65
     </div>
     <div class="intro__fine">
             <p class="note">Gyors, alap felmérés. Pontos számot nem ad, azt mutatja meg, mit érdemes automatizálni elsőre.</p>
+            <p class="note">Az AI nem vesz el munkát: aki használja, ugyanannyi idő alatt többet végez el.</p>
       <p class="fine">A válaszaid a böngésződben maradnak.</p>
     </div>
   </section>
@@ -529,6 +519,7 @@ details p{margin:0 0 1rem;color:var(--ink-2);font-size:.9375rem;line-height:1.65
       <p class="score__k side__k">Eddig hetente</p>
       <p class="side__v" id="sideV"></p>
       <p class="caption">Egy munkahét, 40 óra. Minden válasszal telik.</p>
+      <div id="illSide"></div>
     </div>
   </section>
 
@@ -663,23 +654,6 @@ const RAJZ = {
   ]
 };
 
-const IKON = {
-  dok: [
-    ["M12 6 h16 l8 8 v28 h-24 Z"],
-    ["M28 6 v8 h8"],
-    ["M17 22 h14 M17 28 h14 M17 34 h9", 1]
-  ],
-  level: [
-    ["M6 12 h36 v24 h-36 Z"],
-    ["M6 12 l18 13 l18 -13"],
-    ["M28 42 h10 M34 38 l4 4 l-4 4", 1]
-  ],
-  nyelv: [
-    ["M8 8 h32 a4 4 0 0 1 4 4 v18 a4 4 0 0 1 -4 4 h-16 l-8 7 v-7 h-8 a4 4 0 0 1 -4 -4 v-18 a4 4 0 0 1 4 -4 Z"],
-    ["M13 17 h22 M13 24 h14", 1]
-  ]
-};
-
 const MOZGAS = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const EASE = "cubic-bezier(.23,1,.32,1)";
 const $ = s => document.querySelector(s);
@@ -795,9 +769,8 @@ function evMondat(h){
 }
 function savMondat(r){
   const a = ora(r.lo), b = ora(r.hi);
-  
-  if(a === b) return "Nagyságrend, nem pontos szám: a válaszaid alapján kb. " + a + " óra.";
-  return "Nagyságrend, nem pontos szám: a válaszaid sávjai alapján " + a + " és " + b + " óra között.";
+  if(a === b) return "Becslés: a válaszaid alapján kb. " + a + " óra.";
+  return "Becslés: a válaszaid alapján " + a + " és " + b + " óra között.";
 }
 
 function hetRacs(){
@@ -897,21 +870,25 @@ function frissitProgress(){
 }
 
 async function mutatKartya(irany){
-  const body = $("#cardBody"), ill = $("#illHost");
+  
+  const body = $("#cardBody"), ill = $("#illHost"), ill2 = $("#illSide");
+  const reszek = [body, ill, ill2];
   if(MOZGAS && irany !== 0 && body.childElementCount){
     const ki = [{ opacity:1, transform:"none" },
                 { opacity:0, transform:"translateX(" + (-26 * irany) + "px) rotate(" + (-1.6 * irany) + "deg)" }];
-    await Promise.all([body, ill].map(el => el.animate(ki, { duration:140, easing:EASE, fill:"forwards" }).finished));
+    await Promise.all(reszek.map(el => el.animate(ki, { duration:140, easing:EASE, fill:"forwards" }).finished));
   }
-  [body, ill].forEach(el => el.getAnimations().forEach(a => a.cancel()));
-  ill.innerHTML = illHTML(KAT[st.i]);
+  reszek.forEach(el => el.getAnimations().forEach(a => a.cancel()));
+  const rajzHTML = illHTML(KAT[st.i]);
+  ill.innerHTML = rajzHTML;
+  ill2.innerHTML = rajzHTML;
   body.innerHTML = kartyaHTML(KAT[st.i]);
   typoFix(body);
   frissitProgress();
   if(MOZGAS && irany !== 0){
     
     const be = [{ opacity:0, transform:"translateX(" + (26 * irany) + "px)" }, { opacity:1, transform:"none" }];
-    [body, ill].forEach(el => el.animate(be, { duration:260, easing:EASE }));
+    reszek.forEach(el => el.animate(be, { duration:260, easing:EASE }));
   }
   const h = body.querySelector(".q");
   if(h) h.focus({ preventScroll:true });
@@ -950,20 +927,23 @@ function uresHTML(r){
     + '<button type="button" class="again" id="again">Újrakezdem</button>';
 }
 
-function forras(ikon, cim, szoveg){
-  return '<li><svg class="art icon" viewBox="0 0 48 48" aria-hidden="true">' + utak(IKON[ikon]) + '</svg>'
-    + '<div><h3>' + cim + '</h3><p>' + szoveg + '</p></div></li>';
-}
-
-function mailHTML(n){
-  return '<section class="mail" aria-labelledby="h-mail' + n + '">'
-    + '<h2 class="sec__h" id="h-mail' + n + '">Elküldjük részletesen, folyamatonként</h2>'
-    + '<p>Minden bejelölt folyamatra külön elmagyarázzuk, mit lehet belőle automatizálni, valós példákon keresztül, és azt is, hogy mivel érdemes kezdeni.</p>'
+function mailHTML(r){
+  const ev = Math.round(r.freed * HETEK_EVENTE / ORA_HETENTE);
+  const evSor = ev < 1 ? ""
+    : " Egy év alatt ez " + (ev === 1 ? "egy teljes munkahét" : ev + " teljes munkahét") + ".";
+  return '<section class="mail" aria-labelledby="h-mail">'
+    + '<div class="mail__txt">'
+    + '<h2 class="sec__h" id="h-mail">Megmutattuk, mennyi. A levélben megmutatjuk, hogyan.</h2>'
+    + '<p class="mail__nums">A válaszaid szerint nálatok hetente ' + ora(r.freed) + ' óra megy el ismétlődő munkára.' + evSor + '</p>'
+    + '<p>A levélben folyamatonként leírjuk, mit lehet belőle automatizálni, valós példákkal, és azt is, hogy mivel kezdjétek. Ingyenes.</p>'
+    + '</div>'
     + '<form class="mailForm" novalidate>'
-    + '<div class="field"><label class="sr" for="email' + n + '">E-mail-cím</label>'
-    + '<input id="email' + n + '" type="email" autocomplete="email" placeholder="neved@cegetek.hu">'
-    + '<button class="cta" type="submit">Küldjétek el</button></div>'
-    + '<label class="check"><input type="checkbox" id="optin' + n + '"><span>A későbbi, hasonló témájú leveleket is kérem. Bármikor leiratkozhatok.</span></label>'
+    + '<div class="field"><label class="sr" for="email">E-mail-cím</label>'
+    + '<input id="email" type="email" autocomplete="email" placeholder="neved@cegetek.hu">'
+    + '<button class="cta" type="submit">Kérem a részleteket</button></div>'
+    + '<label class="check"><input type="checkbox" id="optin"><span>A későbbi, hasonló témájú leveleket is kérem. Bármikor leiratkozhatok.</span></label>'
+    
+    + '<p class="fine">Ez itt alap felmérés. A részletes kép a levélben jön.</p>'
     + '<p class="fine mailMsg" role="status">Prototípus: ez a rész még nem küld semmit.</p>'
     + '</form></section>';
 }
@@ -989,35 +969,29 @@ function eredmenyHTML(r){
     + '<div class="year" id="year" aria-hidden="true">' + "<i></i>".repeat(48) + '</div>'
     + '<p class="year__cap">' + evMondat(r.freed) + '</p></div></div>'
 
+    + '<section class="reframe" aria-labelledby="h-ai">'
+    + '<h2 class="reframe__h" id="h-ai">Az AI nem veszi el senkinek a munkáját.</h2>'
+    + '<p class="reframe__p">Aki használja, ugyanannyi idő alatt jóval több és jobb munkát végez el. Ez az idő nem elbocsátás, hanem kapacitás: ugyanaz a csapat többet bír el.</p>'
+    + '</section>'
+
     + '<section class="sec" aria-labelledby="h-top"><h2 class="sec__h" id="h-top">Ahol a legtöbb idő van</h2>'
     + '<ul class="tops">' + tops + '</ul></section>'
 
-    + mailHTML(1)
-
-    + '<section class="sec brain" id="brain" aria-labelledby="h-brain"><h2 class="sec__h" id="h-brain">A saját céges agyatokból dolgozik</h2>'
-    + '<p class="brain__lead">Nem egy általános chatbot válaszol, hanem abból dolgozik, amit a cégetek már tud. Ebből épül fel a céges agy:</p>'
-    + '<ul class="brain__src">'
-    + forras("dok", "Saját dokumentumok", "Árlista, szabályzat, termékleírás, gyakori kérdések.")
-    + forras("level", "Eddigi levelek és ajánlatok", "Ahogy eddig válaszoltatok, ajánlottatok, egyeztettetek.")
-    + forras("nyelv", "A ti nyelvezetetek", "A megszólítás, a szakszavak, a hangnem.")
-    + '</ul>'
-    + '<p class="brain__out">Ezért a válasz nem általános gépi szöveg, hanem a ti hangotokon szól.</p></section>'
-
     + '<section class="sec" aria-labelledby="h-ert"><h2 class="sec__h" id="h-ert">Mennyit ér ez az idő?</h2>'
-    + '<p class="rate__help" id="rateHelp">Annak a nettó órabérét állítsd be, aki nálatok ezeknek a munkáknak a nagy részét végzi. Ha többen csinálják, egy átlagos órabér is jó, ha pedig főleg te magad, a saját órád értékét.</p>'
+    + '<p class="rate__help" id="rateHelp">Állítsd be, mennyibe kerül egy óra annál, aki ezeket a munkákat végzi. Ha többen csinálják, egy átlag is jó.</p>'
     + '<div class="rate"><label for="netto">Nettó órabér</label><output id="nettoOut" for="netto"></output></div>'
     + '<input type="range" id="netto" min="' + NETTO_MIN + '" max="' + NETTO_MAX + '" step="100" value="' + st.netto + '">'
     + '<p class="rate__sub" id="nettoSub"></p>'
-    + '<div class="value"><p class="value__k">A felszabaduló idő havi értéke</p>'
+    + '<div class="value"><p class="value__k">Havonta ennyit ér ez az idő</p>'
     + '<p class="value__v" id="ertek"></p>'
-    + '<p class="value__n">Ez a felszabaduló idő értéke, nem nettó megtakarítás: az eszközöknek is van ára.</p>'
-    
-    + '<p class="value__audit" id="valueAudit">A pontos értékhez részletesebb átnézés kell: ki melyik feladattal mennyi időt tölt, és mennyibe kerül az órája.</p></div>'
+    + '<p class="value__n">Ez az idő értéke, nem megtakarítás: az eszközöknek is van áruk.</p></div>'
     + '<details><summary>Hogyan számoltunk?</summary>'
     + '<p>Minden kérdésnél a megadott sáv közepével számoltunk: az 1 óránál kevesebb fél óra, az 1-3 óra 2 óra, a 3-5 óra 4 óra, az 5 óránál több 6 óra. Az alsó és a felső értékhez a sávok szélét vettük, a legfelső sávnál legfeljebb 8 órát.</p>'
     + '<p>Egy jól beállított automatizálás folyamattól függően az idő 70-90 százalékát tudja átvenni. A többi ellenőrzés, kivételkezelés és karbantartás, az nálatok marad.</p>'
     + '<p>Egy évet 48 munkahéttel, egy munkahetet 40 órával számoltunk. A forintérték a nettó órabér céges költségre váltott értéke: bruttó bér és munkáltatói járulék együtt, ami a mostani kulcsokkal a nettó nagyjából 1,7-szerese.</p>'
     + '</details></section>'
+
+    + mailHTML(r)
 
     + '<section class="bridge" aria-labelledby="h-bridge">'
     + '<h2 class="bridge__h" id="h-bridge">Ez csak az, ami szinte minden cégnél megvan.</h2>'
@@ -1025,11 +999,8 @@ function eredmenyHTML(r){
     + '<div class="scope__row"><span class="scope__on" aria-hidden="true">' + "<i></i>".repeat(KAT.length) + '</span><span class="scope__lbl">Amit most megnéztünk: a nyolc általános folyamat</span></div>'
     + '<div class="scope__row"><span class="scope__off" aria-hidden="true"></span><span class="scope__lbl">Amit egy kérdéssorral nem lehet: a ti saját, egyedi folyamataitok</span></div>'
     + '</div>'
-    + '<p class="bridge__p">A saját, egyedi munkafolyamataitokban általában ennél is több lehetőség van.</p>'
-    + '<p class="bridge__strong">A pontos képhez minden cégnél végig kell nézni a valós folyamatokat. Ebből a felmérésből ez nem derülhet ki, és nem is ez a dolga.</p>'
+    + '<p class="bridge__strong">A saját, egyedi munkafolyamataitokban általában ennél is több lehetőség van.</p>'
     + '</section>'
-
-    + mailHTML(2)
 
     + '<p class="talk">Ha inkább beszélnél róla személyesen: <a href="#" data-proto>időpontot foglalok</a>.</p>'
     + '<p class="vissza"><button type="button" class="linkish" id="back2">Visszalépek a kérdésekhez</button></p>'
@@ -1046,7 +1017,7 @@ function ertekFrissit(r){
   $("#nettoOut").textContent = tagol(net) + " Ft";
   range.setAttribute("aria-valuetext", tagol(net) + " forint nettó óránként");
   const ceg = Math.round(net * KOLTSEG_SZORZO / 100) * 100;
-  $("#nettoSub").textContent = hu("havi nettó kb. " + penz1(net * 168) + " Ft, a cégnek óránként kb. " + tagol(ceg) + " Ft");
+  $("#nettoSub").textContent = hu("A cégnek ez óránként kb. " + tagol(ceg) + " Ft, a járulékokkal együtt.");
   const havi = 4 * net * KOLTSEG_SZORZO;
   $("#ertek").textContent = hu(penzSav(r.lo * havi, r.hi * havi));
 }
@@ -1081,13 +1052,6 @@ function animalEredmeny(r){
     for(let k = 0; k < weeks; k++) ticks[k].classList.add("on");
   }));
 
-  const brain = $("#brain");
-  if(!brain) return;
-  if(!MOZGAS || !("IntersectionObserver" in window)){ brain.classList.add("on"); return; }
-  const io = new IntersectionObserver(es => {
-    es.forEach(e => { if(e.isIntersecting){ brain.classList.add("on"); io.disconnect(); } });
-  }, { threshold:.35 });
-  io.observe(brain);
 }
 
 async function eredmeny(){
@@ -1124,6 +1088,7 @@ async function eredmeny(){
 
   await kepernyo($("#card"), host);
   $("#illHost").innerHTML = "";
+  $("#illSide").innerHTML = "";
   animalEredmeny(r);
 }
 
